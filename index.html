@@ -26,8 +26,14 @@ button{margin-top:18px;width:100%;padding:14px;background:#ff8a1f;border:0;borde
 <div class="g" id="g2"><label>Guest 2 name</label><input name="Guest 2"></div>
 <div class="g" id="g3"><label>Guest 3 name</label><input name="Guest 3"></div>
 <div class="g" id="g4"><label>Guest 4 name</label><input name="Guest 4"></div>
-<button type="submit">RSVP</button></form></div>
+<button type="submit" id="b">RSVP</button><p id="msg" style="text-align:center;font-size:18px"></p></form><div id="ok" class="closed" style="display:none">You're in! See you Oct 24 &#127875;</div></div>
 <script>
+document.getElementById('f').addEventListener('submit',async e=>{e.preventDefault();const b=document.getElementById('b'),m=document.getElementById('msg');b.disabled=true;b.textContent='Sending...';m.textContent='';
+const d=Object.fromEntries(new FormData(e.target));delete d._honey;
+try{const r=await fetch('https://formsubmit.co/ajax/heatherinkol@gmail.com',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(d)});const j=await r.json().catch(()=>({}));
+if(r.ok&&String(j.success)!=='false'){e.target.style.display='none';document.getElementById('ok').style.display='block'}else throw new Error(j.message||r.status)}
+catch(err){m.textContent='Something went wrong. Please try again in a minute.';b.disabled=false;b.textContent='RSVP'}});
+
 const n=document.getElementById('n');n.onchange=()=>{for(let i=2;i<=4;i++)document.getElementById('g'+i).style.display=i<=+n.value?'block':'none'};
 if(new Date()>new Date('2026-10-18T00:00:00-05:00')){document.getElementById('f').style.display='none';document.getElementById('closed').style.display='block'}
 </script></body></html>
